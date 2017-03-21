@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="top"></div>
+
+<h3>userName: <span id="name"></span></h3>
+<table>
+    <tr>
+        <td>
+            <input id="getData" type="button" value="获取数据">
+        </td>
+        <td>
+            <input id="unknownError" type="button" value="系统异常">
+        </td>
+        <td>
+            <input id="businessError" type="button" value="业务异常">
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input id="back" type="button" value="返回">
+        </td>
+        <td>
+            <input id="refresh" type="button" value="刷新">
+        </td>
+        <td>
+            <input id="msg" type="button" value="消息">
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input id="redirect" type="button" value="重定向">
+        </td>
+        <td>
+            <label>
+                url:<input name="url" type="text">
+            </label>
+        </td>
+    </tr>
+</table>
+
+<div id="bottom"></div>
+
+<script src="/js/jquery-1.10.2.min.js"></script>
+<script src="/js/ajax-util.js"></script>
+
+<script>
+
+    //ajax异步加载页面头部和底部
+    AJAX.INCLUDE("top.html", "top");
+    AJAX.INCLUDE("bottom.html", "bottom");
+
+    //绑定按钮事件，采用AJAX对象的方法发起ajax请求
+    // ，自动处理后端异常情况，自动执行后端所要求的动作
+    // 。因为这些已经约定好了。
+    $("#getData").click(function () {
+        AJAX.GET("/test/data", {}, function (data) {
+            $("#name").html(data.userName);
+        })
+    });
+    $("#unknownError").click(function () {
+        AJAX.POST("/test/exception/unknownException")
+    });
+    $("#businessError").click(function () {
+        AJAX.POST("/test/exception/businessException")
+    });
+    $("#refresh").click(function () {
+        AJAX.POST("/test/functions/refresh")
+    });
+    $("#back").click(function () {
+        AJAX.POST("/test/functions/back")
+    });
+    $("#msg").click(function () {
+        AJAX.POST("/test/functions/msg")
+    });
+    $("#redirect").click(function () {
+        var url = $("input[name=url]").val();
+        AJAX.POST("/test/functions/redirect", {url: url})
+    })
+</script>
+</body>
+</html>
